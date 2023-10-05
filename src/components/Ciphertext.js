@@ -1,26 +1,36 @@
 import React, { useEffect } from "react";
 
 function Ciphertext({ cipherText, setCipherText, setPlainText, shiftSelect }) {
-  const encryptText = (plainText, shift) => {
-    let cipherArr = [];
-    let cipherLetter;
+  const decryptText = (cipherText, shift) => {
+    let plainArr = [];
+    let plainLetter;
 
-    plainText.split("").map((letter) => {
-      let code = letter.charCodeAt(letter);
-      if (letter === " ") {
-        return cipherArr.push(letter);
+    cipherText.split("").map((cipher) => {
+      let code = cipher.charCodeAt(cipher);
+      if (cipher === " ") {
+        return plainArr.push(cipher);
       }
       // Uppercase letters
       if (code >= 65 && code <= 90) {
-        cipherLetter = String.fromCharCode(((code - 65 + shift) % 26) + 65);
+        let diff = code - 65 - shift;
+        if (diff >= 0) {
+          plainLetter = String.fromCharCode((diff % 26) + 65);
+        } else {
+          plainLetter = String.fromCharCode(((26 + diff) % 26) + 65);
+        }
       }
       // Lowercase letters
       else if (code >= 97 && code <= 122) {
-        cipherLetter = String.fromCharCode(((code - 97 + shift) % 26) + 97);
+        let diff = code - 97 - shift;
+        if (diff >= 0) {
+          plainLetter = String.fromCharCode((diff % 26) + 97);
+        } else {
+          plainLetter = String.fromCharCode(((26 + diff) % 26) + 97);
+        }
       }
-      return cipherArr.push(cipherLetter);
+      return plainArr.push(plainLetter);
     });
-    return cipherArr.join("");
+    return plainArr.join("");
   };
 
   return (
@@ -36,7 +46,7 @@ function Ciphertext({ cipherText, setCipherText, setPlainText, shiftSelect }) {
         value={cipherText}
         onChange={(e) => {
           setCipherText(e.target.value);
-          setPlainText(encryptText(e.target.value, shiftSelect));
+          setPlainText(decryptText(e.target.value, shiftSelect));
         }}
       />
     </div>
