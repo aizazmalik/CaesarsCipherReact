@@ -1,28 +1,27 @@
-import React from 'react'
+import React, { useEffect } from "react";
 
-function Ciphertext() {
-
+function Ciphertext({ cipherText, setCipherText, setPlainText, shiftSelect }) {
   const encryptText = (plainText, shift) => {
-    let cipherArr = []
-    let cipherLetter
+    let cipherArr = [];
+    let cipherLetter;
 
-    plainText.split("").map(letter => {
-      let code = letter.charCodeAt(letter)
-      if(letter === " ") {
-        return cipherArr.push(letter)
+    plainText.split("").map((letter) => {
+      let code = letter.charCodeAt(letter);
+      if (letter === " ") {
+        return cipherArr.push(letter);
       }
       // Uppercase letters
       if (code >= 65 && code <= 90) {
-        cipherLetter = String.fromCharCode(((code - 65 + shift) % 26) + 65)
+        cipherLetter = String.fromCharCode(((code - 65 + shift) % 26) + 65);
       }
       // Lowercase letters
       else if (code >= 97 && code <= 122) {
-        cipherLetter = String.fromCharCode(((code - 97 + shift) % 26) + 97)
+        cipherLetter = String.fromCharCode(((code - 97 + shift) % 26) + 97);
       }
-      return cipherArr.push(cipherLetter)
-    })
-    return cipherArr.join("")
-  }
+      return cipherArr.push(cipherLetter);
+    });
+    return cipherArr.join("");
+  };
 
   return (
     <div className="card w-18 ml-20">
@@ -34,9 +33,14 @@ function Ciphertext() {
         placeholder="Enter Ciphertext"
         className="mx-25 mb-25"
         data-testid="cipher-text"
+        value={cipherText}
+        onChange={(e) => {
+          setCipherText(e.target.value);
+          setPlainText(encryptText(e.target.value, shiftSelect));
+        }}
       />
     </div>
-  )
+  );
 }
 
-export default Ciphertext
+export default Ciphertext;
